@@ -1,0 +1,38 @@
+{% extends 'layout.html'%}
+
+{% block title %}
+    project
+{% endblock%}
+
+
+{% block body %}
+
+    <!-- <nav class="navigation">
+        <ul>
+            <li>Home</li>
+            <li><button><a href="{{ url_for('blog')}}">Blog</a></button></li>
+            <li><a href="{{ url_for('news')}}">News</a></li>
+            <li>About</li>
+
+        </ul>
+    </nav> -->
+
+    <div class="container">
+
+        <div class="form" >
+            <h1>Login</h1>
+    
+            <form>
+                <label for="username">Name:</label>
+                <input type="text" id="username" name="username"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="pssword" name="password"><br><br>
+                <button value="Submit">Forgot password?</button><br><br>
+                <input type="submit" value="Submit">
+              </form> 
+        </div>
+
+    </div>
+    
+
+{% endblock%}
