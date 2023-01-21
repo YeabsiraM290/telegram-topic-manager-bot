@@ -1,8 +1,9 @@
 # TODO: ERROR HANDLING !!!
 
 import logging
+import os
 
-from settings import BOT_TOKEN
+# from settings import BOT_TOKEN
 
 from handlers import (
     new_message_handler,
@@ -27,7 +28,8 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
 
-    application = Application.builder().token(BOT_TOKEN).build()
+    token  = os.getenv('BOT_TOKEN')
+    application = Application.builder().token(token).build()
 
     application.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, new_message_handler)

@@ -5,7 +5,7 @@ from telegram.ext import ContextTypes
 
 
 from helpers import extract_topic_name, get_topics_from_file, add_topics, remove_topics
-from settings import ADMIN_ID
+# from settings import ADMIN_ID
 from bot_actions import (
     send_new_message_to_admin,
     reply_to_new_message,
@@ -19,6 +19,8 @@ from bot_actions import (
 new_message_reply_text = (
     "Please wait a moment, your message is being reviewd by an admin"
 )
+
+admin_id = os.getenv('ADMIN_ID')
 
 # Event handlers
 
@@ -46,7 +48,7 @@ async def new_message_handler(
 
         # send new message to admin
         await send_new_message_to_admin(
-            admin_id=ADMIN_ID,
+            admin_id=admin_id,
             chat_id=chat_id,
             text=text,
             username=username,
@@ -78,7 +80,7 @@ async def accept_decline_handler(
 
     if button_selected_data == "0":
         await delete_message_from_admin(
-            admin_id=ADMIN_ID, message_id=message_id, bot=context.bot
+            admin_id=admin_id, message_id=message_id, bot=context.bot
         )
 
     else:
@@ -95,7 +97,7 @@ async def accept_decline_handler(
 # add new topic/s to restricted topics
 async def add_topic_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
-    if update.message.chat_id == ADMIN_ID:
+    if update.message.chat_id == admin_id:
         if context.args:
             topics_file_path = os.path.join("bot/db", "topics.json")
             add_topics(file_name=topics_file_path, new_topics=context.args)
@@ -106,7 +108,7 @@ async def remove_topic_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
 
-    if update.message.chat_id == ADMIN_ID:
+    if update.message.chat_id == admin_id:
         if context.args:
             topics_file_path = os.path.join("bot/db", "topics.json")
             remove_topics(file_name=topics_file_path, removed_topics=context.args)
