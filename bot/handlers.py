@@ -1,11 +1,11 @@
 # TODO: ERROR HANDLING !!!
-
+import os
 from telegram import Update
 from telegram.ext import ContextTypes
 
 
-from helpers import extract_topic_name
-from settings import ADMIN_ID, MONITORED_TOPICS
+from helpers import extract_topic_name, get_topics_from_file, add_topics, remove_topics
+from settings import ADMIN_ID
 from bot_actions import (
     send_new_message_to_admin,
     reply_to_new_message,
@@ -20,7 +20,6 @@ new_message_reply_text = (
     "Please wait a moment, your message is being reviewd by an admin"
 )
 
-
 # Event handlers
 
 # called when new message is sent, forward message to admin and reply to the message then delete the message
@@ -28,10 +27,11 @@ async def new_message_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
 
-    if (
-        update.message["is_topic_message"]
-        and extract_topic_name(str(update.message)) in MONITORED_TOPICS
-    ):
+    topics_file_path = os.path.join("bot/db", "topics.json")
+
+    if update.message["is_topic_message"] and extract_topic_name(
+        message=str(update.message)
+    ) in get_topics_from_file(file_name=topics_file_path):
 
         chat_id = update.message.chat_id
         message_id = update.message.message_id
@@ -90,3 +90,23 @@ async def accept_decline_handler(
             text=text,
             bot=context.bot,
         )
+
+
+# add new topic/s to restricted topics
+async def add_topic_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    if update.message.chat_id == ADMIN_ID:
+        if context.args:
+            topics_file_path = os.path.join("bot/db", "topics.json")
+            add_topics(file_name=topics_file_path, new_topics=context.args)
+
+
+# remove topic/s from restricted topics
+async def remove_topic_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> None:
+
+    if update.message.chat_id == ADMIN_ID:
+        if context.args:
+            topics_file_path = os.path.join("bot/db", "topics.json")
+            remove_topics(file_name=topics_file_path, removed_topics=context.args)
