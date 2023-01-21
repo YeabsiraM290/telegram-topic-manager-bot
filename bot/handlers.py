@@ -21,6 +21,7 @@ new_message_reply_text = (
 )
 
 admin_id = os.getenv('ADMIN_ID')
+topics_file_path = os.path.join(os.getenv('FILE_PATH'), "topics.json")
 
 # Event handlers
 
@@ -29,7 +30,7 @@ async def new_message_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
 
-    topics_file_path = os.path.join("bot/db", "topics.json")
+
 
     if update.message["is_topic_message"] and extract_topic_name(
         message=str(update.message)
@@ -99,7 +100,7 @@ async def add_topic_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     if update.message.chat_id == admin_id:
         if context.args:
-            topics_file_path = os.path.join("bot/db", "topics.json")
+            topics_file_path = os.path.join(topics_file_path, "topics.json")
             add_topics(file_name=topics_file_path, new_topics=context.args)
 
 
@@ -110,5 +111,5 @@ async def remove_topic_handler(
 
     if update.message.chat_id == admin_id:
         if context.args:
-            topics_file_path = os.path.join("bot/db", "topics.json")
+            topics_file_path = os.path.join(topics_file_path, "topics.json")
             remove_topics(file_name=topics_file_path, removed_topics=context.args)
