@@ -21,7 +21,7 @@ new_message_reply_text = (
 )
 
 admin_id = os.getenv('ADMIN_ID')
-topics_file_path = os.path.join(os.getenv('FILE_PATH'), "topics.json")
+topics_file_path = "topics.json"
 
 # Event handlers
 
@@ -98,9 +98,8 @@ async def accept_decline_handler(
 # add new topic/s to restricted topics
 async def add_topic_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
-    if update.message.chat_id == admin_id:
+    if update.message.chat_id == int(admin_id):
         if context.args:
-            topics_file_path = os.path.join(topics_file_path, "topics.json")
             add_topics(file_name=topics_file_path, new_topics=context.args)
 
 
@@ -109,7 +108,6 @@ async def remove_topic_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
 
-    if update.message.chat_id == admin_id:
+    if update.message.chat_id == int(admin_id):
         if context.args:
-            topics_file_path = os.path.join(topics_file_path, "topics.json")
             remove_topics(file_name=topics_file_path, removed_topics=context.args)

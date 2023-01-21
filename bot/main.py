@@ -28,11 +28,11 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
 
-    token  = os.getenv('BOT_TOKEN')
+    token = os.getenv("BOT_TOKEN")
     application = Application.builder().token(token).build()
 
     application.add_handler(
-        MessageHandler(filters.TEXT & ~filters.COMMAND, new_message_handler)
+        MessageHandler(filters.ALL, new_message_handler)
     )
     application.add_handler(CallbackQueryHandler(accept_decline_handler))
 
